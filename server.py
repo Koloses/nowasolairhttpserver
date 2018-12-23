@@ -22,7 +22,7 @@ class Server(BaseHTTPRequestHandler):
         r = s.post('http://80.53.180.198/dane-pomiarowe/pobierz', data=payload)
         air = r.json()
 
-        nazwa = air['data']['title'], 'utf-8'
+        nazwa = air['data']['title']
 		#select keys needed
         for serie in air['data']['series']:
 			
