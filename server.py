@@ -22,7 +22,7 @@ class Server(BaseHTTPRequestHandler):
         r = s.post('http://80.53.180.198/dane-pomiarowe/pobierz', data=payload)
         air = r.json()
 
-        nazwa = air['data']['title']
+        nazwa = air['data']['title'], 'utf-8'
 		#select keys needed
         for serie in air['data']['series']:
 			
@@ -83,7 +83,8 @@ class Server(BaseHTTPRequestHandler):
                     wilgotnoscwzgledna = data[1]+serie['unit']
 				
         self._set_headers()
-        self.wfile.write(json.dumps({'nazwa': nazwa, 'benzen': benzen}).encode())
+        self.wfile.write(json.dumps({'data':{'nazwa': nazwa, 'benzen': benzen, 'cisnienie': cisnienie, 'no2': no2, 'etylobenzen': etylobenzen, 'kierwiatr': kierwiatr,
+        'mpksylen': mpksylen, 'predkoscwiatru': predkoscwiatru, 'pm10': pm10, 'pm25': pm25, 'temperatura': temperatura, 'no': no, 'tlenkiazotu': tlenkiazotu, 'wilgotnoscwzgledna': wilgotnoscwzgledna}}).encode('utf8'))
         
     # POST echoes the message adding a JSON field
     def do_POST(self):
@@ -106,7 +107,7 @@ class Server(BaseHTTPRequestHandler):
         self._set_headers()
         self.wfile.write(json.dumps(message))
         
-def run(server_class=HTTPServer, handler_class=Server, port=8008):
+def run(server_class=HTTPServer, handler_class=Server, port=8009):
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     
